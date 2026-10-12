@@ -1,4 +1,4 @@
-// Conta quantas pessoas votaram.
+// Conta a quantidade de votos.
 export function contarVotos(avaliacoes) {
   return avaliacoes.length;
 }
@@ -15,6 +15,9 @@ export function calcularMedia(avaliacoes) {
 }
 
 // Classifica o filme conforme a média.
+// Média exatamente 4: esclarecer se a faixa
+// "entre 3 e 4" inclui o limite superior.
+// A implementação atual considera 4 como recomendado.
 export function classificarFilme(media) {
   if (media >= 4) {
     return "Filme recomendado";
@@ -27,7 +30,7 @@ export function classificarFilme(media) {
   return "Filme ruim";
 }
 
-// Reúne os resultados do filme escolhido.
+// Avalia um único filme.
 export function avaliarFilme(filme) {
   const votos = contarVotos(filme.avaliacoes);
   const media = calcularMedia(filme.avaliacoes);
@@ -39,4 +42,9 @@ export function avaliarFilme(filme) {
     media: media,
     avaliacao: avaliacao,
   };
+}
+
+// Avalia todos os filmes do vetor.
+export function avaliarFilmes(filmes) {
+  return filmes.map(avaliarFilme);
 }
