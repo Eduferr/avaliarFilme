@@ -33,11 +33,11 @@ Cada nota representa o voto de uma pessoa.
 
 ### Regras do enunciado
 
-| Média | Classificação |
-|---|---|
+| Média              | Classificação     |
+|--------------------|-------------------|
 | Maior ou igual a 4 | Filme recomendado |
-| Entre 3 e 4 | Filme razoável |
-| Menor que 3 | Filme ruim |
+| Entre 3 e 4        | Filme razoável    |
+| Menor que 3        | Filme ruim        |
 
 ### Requisitos de entrega
 
@@ -50,23 +50,23 @@ Cada nota representa o voto de uma pessoa.
 
 A solução utiliza funções com responsabilidades específicas:
 
-| Função | Responsabilidade |
-|---|---|
-| `contarVotos` | Contar as avaliações usando `.length`. |
-| `calcularMedia` | Somar as notas e dividir pela quantidade de avaliações. |
-| `classificarFilme` | Determinar a classificação conforme a média. |
-| `avaliarFilme` | Retornar nome, votos, média e classificação de um filme. |
-| `avaliarFilmes` | Avaliar todos os filmes do vetor usando `.map()`. |
+| Função             | Responsabilidade                                         |
+|--------------------|----------------------------------------------------------|
+| `contarVotos`      | Contar as avaliações usando `.length`.                   |
+| `calcularMedia`    | Somar as notas e dividir pela quantidade de avaliações.  |
+| `classificarFilme` | Determinar a classificação conforme a média.             |
+| `avaliarFilme`     | Retornar nome, votos, média e classificação de um filme. |
+| `avaliarFilmes`    | Avaliar todos os filmes do vetor usando `.map()`.        |
 
 Os dados ficam em uma fixture JSON. Nos testes, cada filme da fixture é enviado individualmente para `avaliarFilme`, e seu resultado completo é comparado com o esperado.
 
 ### Resultados esperados
 
-| Filme | Votos | Média | Classificação |
-|---|---:|---:|---|
-| Minha mãe é uma peça | 5 | 4,4 | Filme recomendado |
-| Saneamento Básico | 5 | 3,2 | Filme razoável |
-| Se eu fosse você | 3 | 2 | Filme ruim |
+| Filme                | Votos | Média | Classificação     |
+|----------------------|-------|-------|-------------------|
+| Minha mãe é uma peça | 5     | 4,4   | Filme recomendado |
+| Saneamento Básico    | 5     | 3,2   | Filme razoável    |
+| Se eu fosse você     | 3     | 2     | Filme ruim        |
 
 ### Exemplo de retorno
 
