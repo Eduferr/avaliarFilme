@@ -4,11 +4,11 @@ Projeto desenvolvido como solução do **Exercício 5 da mentoria em QA**, utili
 
 ## 📋 Desafio
 
-A partir de um vetor contendo os nomes dos filmes e as notas atribuídas pelos usuários, apresentar para cada filme:
+A partir de um vetor contendo filmes e suas avaliações, apresentar para cada filme:
 
-- Quantas pessoas votaram.
-- A média das notas.
-- A classificação correspondente à média.
+- Quantidade de pessoas que votaram.
+- Média das notas.
+- Classificação correspondente à média.
 
 Cada nota representa o voto de uma pessoa.
 
@@ -33,11 +33,11 @@ Cada nota representa o voto de uma pessoa.
 
 ### Regras do enunciado
 
-| Média              | Classificação     |
-|--------------------|-------------------|
+| Média | Classificação |
+|---|---|
 | Maior ou igual a 4 | Filme recomendado |
-| Entre 3 e 4        | Filme razoável    |
-| Menor que 3        | Filme ruim        |
+| Entre 3 e 4 | Filme razoável |
+| Menor que 3 | Filme ruim |
 
 ### Requisitos de entrega
 
@@ -48,113 +48,102 @@ Cada nota representa o voto de uma pessoa.
 
 ## 💡 Proposta de solução
 
-A solução separa o processamento em funções com responsabilidades específicas:
+A solução utiliza funções com responsabilidades específicas:
 
-| Função             | Responsabilidade                                                          |
-|--------------------|---------------------------------------------------------------------------|
-| `contarVotos`      | Retornar a quantidade de avaliações usando `.length`.                     |
-| `calcularMedia`    | Somar as notas e dividir pela quantidade de avaliações.                   |
-| `classificarFilme` | Determinar a classificação conforme a média.                              |
-| `avaliarFilme`     | Reunir nome, quantidade de votos, média e classificação de um filme.      |
-| `avaliarFilmes`    | Percorrer o vetor com `.map()` e retornar o resultado de todos os filmes. |
+| Função | Responsabilidade |
+|---|---|
+| `contarVotos` | Contar as avaliações usando `.length`. |
+| `calcularMedia` | Somar as notas e dividir pela quantidade de avaliações. |
+| `classificarFilme` | Determinar a classificação conforme a média. |
+| `avaliarFilme` | Retornar nome, votos, média e classificação de um filme. |
+| `avaliarFilmes` | Avaliar todos os filmes do vetor usando `.map()`. |
 
-Os dados dos filmes ficam em uma fixture JSON, separada do código da aplicação e dos testes.
+Os dados ficam em uma fixture JSON. Nos testes, cada filme da fixture é enviado individualmente para `avaliarFilme`, e seu resultado completo é comparado com o esperado.
 
-### Resultado esperado para a entrada fornecida
+### Resultados esperados
+
+| Filme | Votos | Média | Classificação |
+|---|---:|---:|---|
+| Minha mãe é uma peça | 5 | 4,4 | Filme recomendado |
+| Saneamento Básico | 5 | 3,2 | Filme razoável |
+| Se eu fosse você | 3 | 2 | Filme ruim |
+
+### Exemplo de retorno
 
 ```json
-[
-  {
-    "nome": "Minha mãe é uma peça",
-    "votos": 5,
-    "media": 4.4,
-    "avaliacao": "Filme recomendado"
-  },
-  {
-    "nome": "Saneamento Básico",
-    "votos": 5,
-    "media": 3.2,
-    "avaliacao": "Filme razoável"
-  },
-  {
-    "nome": "Se eu fosse você",
-    "votos": 3,
-    "media": 2,
-    "avaliacao": "Filme ruim"
-  }
-]
+{
+  "nome": "Minha mãe é uma peça",
+  "votos": 5,
+  "media": 4.4,
+  "avaliacao": "Filme recomendado"
+}
 ```
 
-## 🔎 Ponto de esclarecimento do requisito
+## 🔎 Esclarecimento do requisito
 
-O enunciado apresenta a regra **média >= 4** para filmes recomendados e a expressão **“entre 3 e 4”** para filmes razoáveis.
+O enunciado define **média >= 4** para filmes recomendados e utiliza a expressão **“entre 3 e 4”** para filmes razoáveis.
 
-Se a segunda faixa incluir o valor 4, haverá uma sobreposição: a mesma média poderá atender às duas classificações.
+Se a segunda faixa incluir o valor 4, haverá sobreposição entre as classificações.
 
-**Pergunta para esclarecimento:** a faixa de “Filme razoável” deve incluir médias maiores ou iguais a 3 e menores que 4?
+**Pergunta:** a faixa de “Filme razoável” deve considerar `3 <= média < 4`?
 
-A implementação atual segue a regra explícita `>= 4`:
+A implementação atual segue estas condições:
 
-| Condição implementada      | Classificação     |
+| Condição                   | Classificação     |
 |----------------------------|-------------------|
 | `media >= 4`               | Filme recomendado |
 | `media >= 3` e `media < 4` | Filme razoável    |
 | `media < 3`                | Filme ruim        |
 
-O caso **CT09 — Classificação com média exatamente 4: pendente de esclarecimento do requisito** está marcado com `it.skip`.
+O **CT04 — Classificação com média exatamente 4: pendente de esclarecimento do requisito** está marcado com `it.skip`.
 
-Esse registro representa uma dúvida sobre a redação do requisito, não um defeito confirmado na implementação. Após o esclarecimento, será necessário definir a asserção e ativar o teste.
+Esse caso registra uma dúvida sobre o requisito, não um defeito confirmado. Após o esclarecimento, será necessário implementar a validação e remover `.skip`.
 
-## 🧪 Estratégia de testes
+## 🧪 Testes automatizados
 
-Os testes verificam as funções individualmente e o resultado do processamento do vetor completo.
+Cada teste ativo verifica o resultado completo de um filme: nome, quantidade de votos, média e classificação.
 
-A análise de valores-limite contempla médias abaixo, exatamente no limite e acima dos pontos de transição entre as classificações.
+| Caso | Cenário                          | Resultado esperado         |
+|------|----------------------------------|----------------------------|
+| CT01 | Minha mãe é uma peça — média 4,4 | Filme recomendado          |
+| CT02 | Saneamento Básico — média 3,2    | Filme razoável             |
+| CT03 | Se eu fosse você — média 2       | Filme ruim                 |
+| CT04 | Média exatamente 4               | Pendente de esclarecimento |
 
-| Caso | Cenário                                 | Resultado esperado                       |
-|------|-----------------------------------------|------------------------------------------|
-| CT01 | Contar quatro notas repetidas           | 4 votos                                  |
-| CT02 | Contar avaliações em um array vazio     | 0 votos                                  |
-| CT03 | Calcular a média de `[2, 3, 3, 5]`      | 3,25                                     |
-| CT04 | Calcular a média de uma única nota `[5]`| 5                                        |
-| CT05 | Classificar média 2,9                   | Filme ruim                               |
-| CT06 | Classificar média exatamente 3          | Filme razoável                           |
-| CT07 | Classificar média 3,9                   | Filme razoável                           |
-| CT08 | Classificar média 4,1                   | Filme recomendado                        |
-| CT09 | Classificar média exatamente 4          | Pendente de esclarecimento               |
-| CT10 | Avaliar os três filmes da fixture       | Resultados completos na ordem de entrada |
-| CT11 | Verificar os dados após o processamento | Entrada preservada                       |
+O `assert.deepEqual` compara o objeto retornado com o resultado esperado.
 
-O `assert.equal` valida valores individuais, enquanto o `assert.deepEqual` compara estruturas completas.
+Os comandos `console.log` exibem os resultados no terminal para facilitar a leitura. A validação automática é realizada pelas asserções.
 
-### Limites do escopo
+### Limites da cobertura
 
-A contagem de um array vazio está coberta. Entretanto, o enunciado não define como calcular a média ou classificar um filme sem avaliações.
+Esta versão verifica os três filmes do enunciado individualmente.
 
-Também não foram estabelecidas regras para notas inválidas, valores não numéricos ou limites permitidos para as notas. Esses comportamentos dependem de requisitos adicionais.
+Não contempla testes separados das funções auxiliares, processamento de vários filmes na mesma chamada, avaliações vazias ou dados inválidos.
+
+O tratamento de filmes sem avaliações, notas não numéricas e limites permitidos para as notas depende de requisitos adicionais.
 
 ## 🛠️ Tecnologias
 
-- **JavaScript:** implementação das funções.
+- **JavaScript:** implementação da solução.
 - **Node.js:** ambiente de execução.
 - **Mocha:** organização e execução dos testes.
 - **`node:assert/strict`:** validação dos resultados.
-- **Mochawesome:** geração do relatório de testes.
-- **JSON:** armazenamento dos dados da fixture.
+- **Mochawesome:** geração do relatório.
+- **JSON:** armazenamento dos dados de teste.
 
 O projeto utiliza ES Modules, configurado com `"type": "module"` no `package.json`.
 
 ## 📁 Estrutura do projeto
 
-| Caminho | Conteúdo |
-|---|---|
-| `src/avaliarFilme.js` | Código da aplicação |
-| `fixtures/filmes.json` | Dados dos filmes |
-| `test/avaliarFilme.test.js` | Casos de teste |
-| `package.json` | Configuração, scripts e dependências |
-| `package-lock.json` | Registro das versões das dependências |
-| `.gitignore` | Arquivos e pastas ignorados pelo Git |
-| `README.md` | Documentação do projeto |
+| Caminho                     | Conteúdo                               |
+|-----------------------------|----------------------------------------|
+| `src/avaliarFilme.js`       | Funções da aplicação                   |
+| `fixtures/filmes.json`      | Dados dos filmes                       |
+| `test/avaliarFilme.test.js` | Testes automatizados                   |
+| `package.json`              | Scripts e dependências                 |
+| `package-lock.json`         | Registro das versões das dependências  |
+| `.gitignore`                | Arquivos e pastas ignorados pelo Git   |
+| `README.md`                 | Documentação do projeto                |
 
 ## ▶️ Como executar
 
@@ -162,7 +151,7 @@ O projeto utiliza ES Modules, configurado com `"type": "module"` no `package.jso
 
 - Node.js com suporte a ES Modules e importação JSON com `with { type: "json" }`.
 - npm.
-- Git, para clonar o repositório.
+- Git.
 
 ### 1. Clonar o repositório
 
@@ -188,24 +177,43 @@ npm install
 npm test
 ```
 
-Com a implementação proposta, o resultado esperado é **10 testes aprovados e 1 pendente**. O resultado efetivo deve ser conferido após a execução.
+**Resultado esperado: 3 testes aprovados e 1 pendente.**
 
-## 📊 Relatório de testes
+O resultado efetivo deve ser conferido após a execução.
 
-Para executar os testes com o relatório Mochawesome:
+## 📊 Relatório Mochawesome
+
+Para gerar o relatório, utilize:
 
 ```bash
 npm run test:report
 ```
 
-Após a execução, abra o arquivo:
+Esse comando requer o seguinte script no `package.json`:
+
+```json
+"scripts": {
+  "test": "mocha",
+  "test:report": "mocha --reporter mochawesome"
+}
+```
+
+Se o script `test` estiver configurado como `"mocha --reporter mochawesome"`, o comando `npm test` também gerará o relatório.
+
+Após a execução, abra no navegador:
 
 ```text
 mochawesome-report/mochawesome.html
 ```
 
-As pastas `node_modules` e `mochawesome-report` são ignoradas pelo Git. As dependências podem ser reinstaladas e o relatório pode ser gerado novamente pelos comandos documentados.
+O CT04 aparecerá como pendente, pois está marcado com `it.skip`.
+
+Inclua no `.gitignore`:
+
+```gitignore
+node_modules/
+mochawesome-report/
+```
 
 ## 👤 Autor
 **Edu Ferreira**
-
